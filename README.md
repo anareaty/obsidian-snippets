@@ -1,0 +1,1 @@
+# obsidian-snippets-and-templates
