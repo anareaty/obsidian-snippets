@@ -1,1 +1,1 @@
-# obsidian-snippets
+# Obsidian snippets, templates and scripts
