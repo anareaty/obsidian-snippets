@@ -18,7 +18,7 @@ const changeFilter = async(prop) => {
 	  if (v == null) {
 	    return "-"
 	  } else if (v == "all") {
-	    return "-все-"
+	    return "-all-"
 	  } else {
 	    return v
 	  }
@@ -66,7 +66,7 @@ const changeFilterMulti = async(prop) => {
 	  if (v == null) {
 	    return "-"
 	  } else if (v == "all") {
-	    return "-все-"
+	    return "-all-"
 	  } else {
 	    return v
 	  }
@@ -114,7 +114,7 @@ const changeFilterTags = async() => {
 	  if (v == null) {
 	    return "-"
 	  } else if (v == "all") {
-	    return "-все-"
+	    return "-all-"
 	  } else {
 	    return v
 	  }
