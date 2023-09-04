@@ -8,7 +8,7 @@
 
 Демо:
 
-![](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/assets/55949830/9493e508-0588-4b09-8ec0-bf8ffa06024e)
+![Образец-таблицы-с-фильтрами-и-паджинацией-Obsidian-Obsidian-v1 4 5-2023-09-04-19-58-07](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/assets/55949830/cb27d390-093f-4a86-ad77-f659b3b01046)
 
 [Ссылка на скрипт](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/blob/main/jataviewjs-table-with-filters-and-pagination.js)
 
