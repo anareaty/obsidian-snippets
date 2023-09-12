@@ -58,14 +58,14 @@ filteredPages = await df.paginate(filteredPages, paginationNum, current)
 
 let headers = [ 
     "file",
-	"text property",
-	"list property",
-	"tags",
-	"link property",
-	"boolean property",
-	"file metadata",
-	"task progress"
-	]
+    "text property",
+    "list property",
+    "tags",
+    "link property",
+    "boolean property",
+    "file metadata",
+    "task progress"
+]
 
 
 // Create rows. There are some optional functions for decoration.
