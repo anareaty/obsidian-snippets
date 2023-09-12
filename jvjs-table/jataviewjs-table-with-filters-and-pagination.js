@@ -8,6 +8,8 @@ const df = require(app.vault.adapter.basePath + "/scripts/dvFunctions.js")
 let current = dv.current()
 
 
+
+// You can edit your query here
 let pages = dv.pages()
 let filteredPages = [...pages]
 
