@@ -7,6 +7,7 @@
 Для использования требуется плагин Dataview.
 
 Сначала нужно скачать [этот скрипт](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/blob/main/jvjs-table/dvFunctions.js) в формате .js и положить его в своё хранилище Обсидиана.
+
 Потом нужно скопировать [этот код](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/blob/main/jvjs-table/jataviewjs-table-with-filters-and-pagination.js), вставить его в блок dataviewjs в заметке и отредактировать согласно инструкциям в комментариях.
 
 Демо:
