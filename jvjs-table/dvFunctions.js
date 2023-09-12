@@ -330,7 +330,7 @@ const filterFunctionMulti = async(prop, current, filteredPages) => {
   const filterFunctionTags = async(current, filteredPages) => {
 	let filter = current.filter_tags
 	if (filter == "-") {
-	  return filteredPages.filter(p => p.file.tags.length == 0)
+	  return filteredPages.filter(p => !p.file.tags || p.file.tags.length == 0)
 	} else if (filter != "all" && filter != null) {
 	  return filteredPages.filter(p => {
 	  	let propVal = p.file.tags
