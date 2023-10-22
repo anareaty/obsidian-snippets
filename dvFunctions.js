@@ -748,8 +748,5 @@ class df {
 		return dv.array(canvasPages)
 	}
 
-
-
-
 }
 

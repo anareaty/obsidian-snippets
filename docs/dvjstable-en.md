@@ -1,5 +1,9 @@
 It is the script for dataviewjs that helps to create tables in Obsidian with filters and pagination. It also adds some other useful functions. Most of the code is put to the separate file to to make it reusable and avoin cluttering your note.
 
+Demo:
+
+![Образец-таблицы-с-фильтрами-и-паджинацией-Obsidian-Obsidian-v1 4 5-2023-09-04-19-58-07](https://github.com/anareaty/obsidian-snippets-templates-and-scripts/assets/55949830/cb27d390-093f-4a86-ad77-f659b3b01046)
+
 Plugins required for the script to work:
 
 - Dataview;
