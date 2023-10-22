@@ -18,7 +18,7 @@ Setup:
 3. Create an empty template in your templates folder an chose it as startup template it Templater plugin's settings. Skip this step if you olready have some startup template.
 4. Copy this code and paste it to the dataviewjs codeblock in your note. Edit it, according to your needs.
 
-````js
+````
 ```dataviewjs
 
 const {df} = customJS
