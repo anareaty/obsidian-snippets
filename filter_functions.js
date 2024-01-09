@@ -1,3 +1,5 @@
+// Download file and put it in your vault
+
 // Access Obsidian API
 
 const plugins = app.plugins.plugins
