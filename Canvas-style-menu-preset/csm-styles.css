@@ -1,0 +1,539 @@
+
+/* BORDERS */
+
+/* Border defaults */
+
+.canvas-node {
+  --border-style: solid;
+  --border-width: 3px;
+  --box-shadow: unset;
+  --border-radius: 4px;
+  
+  --cc-gradient-start: 1;
+  --cc-gradient-end: 0;
+  --card-opacity: 0.2;
+  --content-background: rgba(var(--canvas-color), var(--card-opacity));
+}
+
+.canvas-node-container, 
+.canvas-node.is-themed .canvas-node-container{
+  border-style: var(--border-style);
+  border-width: var(--border-width);
+  box-shadow: var(--box-shadow);
+  border-color: rgba(var(--canvas-color));
+  border-radius: var(--border-radius);
+}
+
+.canvas-node.is-themed .canvas-node-content {
+  background-color: var(--content-background);
+}
+
+.canvas-node .canvas-node-label {
+  display: none;
+}
+
+/* Border variants */
+
+/* NO BORDER */
+
+.canvas-node.cs-my-border-none .canvas-node-container {
+  border-color: transparent;
+}
+
+
+.canvas-node.cs-my-border-none:not(.is-focused, .is-selected) .canvas-node-container:hover {
+  border: 3px dotted rgba(var(--canvas-color), 0.5);
+}
+
+
+
+
+.canvas-node.cs-my-border-thin .canvas-node-container {
+  --border-width: 1px;
+}
+
+.canvas-node.cs-my-border-thick .canvas-node-container {
+  --border-width: 10px;
+}
+
+.canvas-node.cs-my-border-dotted .canvas-node-container {
+  --border-style: dotted;
+  --border-width: 3px; 
+}
+
+.canvas-node.cs-my-border-dashed .canvas-node-container {
+  --border-style: dashed;
+  --border-width: 3px;
+}
+
+.canvas-node.cs-my-border-double .canvas-node-container {
+  --border-style:   double;
+  --border-width:   7px;
+}
+
+
+/* BORDER POSITIONS */
+
+.canvas-node:is(
+  .cs-my-border-left, 
+  .cs-my-border-right, 
+  .cs-my-border-top, 
+  .cs-my-border-bottom, 
+  .cs-my-border-top-and-bottom, 
+  .cs-my-border-top-and-right, 
+  .cs-my-border-top-and-left,
+  .cs-my-border-bottom-and-right,
+  .cs-my-border-bottom-and-left,
+  .cs-my-border-no-top,
+  .cs-my-border-no-bottom,
+  .cs-my-border-no-right,
+  .cs-my-border-no-left,
+  .cs-my-border-right-and-left
+  ) .canvas-node-container {
+  --border-radius: 0;
+  border: none;
+}
+
+.canvas-node.cs-my-border-left .canvas-node-container { 
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+}
+
+.canvas-node.cs-my-border-right .canvas-node-container { 
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-right-and-left .canvas-node-container { 
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+}
+
+.canvas-node.cs-my-border-top .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-bottom .canvas-node-container { 
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-top-and-bottom .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+
+
+
+
+.canvas-node.cs-my-border-top-and-right .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-top-and-left .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-bottom-and-right .canvas-node-container { 
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-bottom-and-left .canvas-node-container { 
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-no-top .canvas-node-container { 
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+}
+
+.canvas-node.cs-my-border-no-bottom .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+}
+
+.canvas-node.cs-my-border-no-right .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+  border-left: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+}
+
+.canvas-node.cs-my-border-no-left .canvas-node-container { 
+  border-top: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+  border-bottom: var(--border-width) var(--border-style) rgba(var(--canvas-color)); 
+  border-right: var(--border-width) var(--border-style) rgba(var(--canvas-color));
+}
+
+
+
+
+
+
+
+
+
+/* SHAPES */
+
+.canvas-node.cs-my-border-squared {
+ --border-radius: 0 !important;
+}
+
+.canvas-node.cs-my-border-rounded {
+  --border-radius: 90px !important;
+}
+
+.canvas-node.cs-my-shape-circle:not(.is-editing) {
+  --border-radius: 50% !important;
+}
+
+.canvas-node:not(.is-editing).cs-my-shape-parallelogram-left .canvas-node-container {
+  transform: skew(30deg);
+  .markdown-preview-section {
+    transform: skew(-30deg);
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-shape-parallelogram-right .canvas-node-container {
+  transform: skew(-30deg);
+  .markdown-preview-section {
+    transform: skew(30deg);
+  }
+}
+
+
+
+/* DROPSHADOW */
+
+.canvas-node.cs-my-shadow-gray-small {
+  --box-shadow: 2px 3px 8px 2px rgba(0, 0, 0, 40%) !important;
+}
+
+.canvas-node.cs-my-shadow-gray-big {
+  --box-shadow: 2px 8px 36px 4px rgba(0, 0, 0, 40%) !important;
+}
+
+.canvas-node.cs-my-shadow-color-small {
+  --box-shadow: 2px 3px 8px 2px rgba(var(--canvas-color), 100%) !important;
+}
+
+.canvas-node.cs-my-shadow-color-big {
+  --box-shadow: 2px 8px 36px 4px rgba(var(--canvas-color), 100%) !important;
+}
+
+
+
+/* ROTATE */
+
+.canvas-node.cs-my-rotate-right-45 .canvas-node-container {
+  transform: rotate(45deg);
+}
+
+.canvas-node.cs-my-rotate-right-90 .canvas-node-container {
+  transform: rotate(90deg);
+}
+
+.canvas-node.cs-my-rotate-right-135 .canvas-node-container {
+  transform: rotate(135deg);
+}
+
+.canvas-node.cs-my-rotate-left-135 .canvas-node-container {
+  transform: rotate(-135deg);
+}
+
+.canvas-node.cs-my-rotate-180 .canvas-node-container {
+  transform: rotate(180deg);
+}
+
+.canvas-node.cs-my-rotate-left-45 .canvas-node-container {
+  transform: rotate(-45deg);
+}
+
+.canvas-node.cs-my-rotate-left-90 .canvas-node-container {
+  transform: rotate(-90deg);
+}
+
+
+/* BACKGROUND */
+
+.canvas-node.cs-my-bg-transparent {
+  --content-background: transparent;
+  --card-opacity: 0;
+}
+
+
+.canvas-node.cs-my-bg-transparent .canvas-node-container {
+  background: transparent;
+}
+
+.canvas-node.is-themed.cs-my-card-opaque .canvas-node-container {
+  background-color: transparent;
+}
+
+
+.canvas-node.is-themed.cs-my-card-pale {
+  --card-opacity: 0.05;
+}
+
+.canvas-node.is-themed.cs-my-card-bright{
+  --card-opacity: 0.6;
+
+}
+
+.canvas-node.is-themed.cs-my-card-fill {
+  --card-opacity: 1;
+
+}
+
+
+
+
+/* GRADIENTS */
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-0deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(0deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-45deg .canvas-node-container .markdown-preview-view {
+    background: linear-gradient(45deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-90deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(90deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-135deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(135deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-180deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(180deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-225deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(225deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+} 
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-270deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(270deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+.canvas-node:not(.is-editing).cs-my-card-gradient-315deg .canvas-node-container {
+  background: var(--canvas-background) !important;
+  .markdown-preview-view {
+    background: linear-gradient(315deg, rgba(var(--canvas-color), var(--cc-gradient-start)), rgba(var(--canvas-color), var(--cc-gradient-end)));
+  }
+}
+
+
+
+
+/*TEXT ALIGN*/
+
+.canvas-node:not(.is-editing).cs-my-content-align-center {
+  text-align: center;
+}
+
+.canvas-node:not(.is-editing).cs-my-content-align-center .markdown-preview-view:before {
+  display: none;
+}
+
+
+
+
+.canvas-node:not(.is-editing).cs-my-text-align-center {
+  text-align: center;
+}
+
+.canvas-node:not(.is-editing).cs-my-text-align-left {
+  text-align: left;
+}
+
+.canvas-node:not(.is-editing).cs-my-text-align-right {
+  text-align: right;
+}
+
+
+/*HEADERS AND LABELS*/
+
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer, .cs-my-label-right, .cs-my-label-left) .markdown-preview-view:before,
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer, .cs-my-label-right, .cs-my-label-left) .markdown-preview-view:after,
+.canvas-node-content.markdown-embed > .markdown-embed-content > .markdown-preview-view::after {
+  display: none;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer) .markdown-preview-view {
+  min-height: 0 ;
+  padding-bottom: 0;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer) .markdown-preview-sizer > div:nth-child(2) {
+  margin-left: calc(-1 * var(--size-4-6));
+  margin-right: calc(-1 * var(--size-4-9));
+  margin-bottom: 0; 
+  background: unset;
+  background-color: rgba(var(--canvas-color), 0.3); 
+  border-bottom: 2px solid rgba(var(--canvas-color));
+  border-radius: unset;
+  text-align: center;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer) .markdown-preview-sizer {
+  padding-top: 50px;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-header, .cs-my-header-and-footer, .cs-my-label-left, .cs-my-label-right) .markdown-preview-sizer > div:nth-child(2) > *,
+.canvas-node:not(.is-editing):is(.cs-my-footer, .cs-my-header-and-footer) .markdown-preview-sizer > div:last-child > * {
+  margin: 0;
+  border: none;
+}
+
+
+
+
+.canvas-node:not(.is-editing):is(.cs-my-footer, .cs-my-header-and-footer) .markdown-preview-sizer > div:last-child {
+  position: absolute;
+  bottom: 0;
+
+left: 0;
+right: 0;
+
+
+  width: 100%;
+  background: unset;
+   
+  background-color: white !important; 
+  border: unset;
+  border-top: 2px solid rgba(var(--canvas-color));
+  border-radius: unset;
+  padding: 0;
+  text-align:center;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-footer, .cs-my-header-and-footer) .markdown-preview-sizer > div:last-child > * {
+  background-color: rgba(var(--canvas-color), calc(var(--card-opacity) + 0.3));
+  margin: 0;
+  padding: 10px;
+}
+
+
+
+.canvas-node:not(.is-editing):is(.cs-my-header-and-footer, .cs-my-footer, .cs-my-header, .cs-my-label-left, .cs-my-label-right) {
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-horizontal {
+    display: none;
+  }
+}
+
+
+.canvas-node:not(.is-editing):is(.cs-my-label-left) .markdown-preview-sizer > div:nth-child(2) {
+  width: 50px !important;
+  background: unset;
+  background-color: rgba(var(--canvas-color), 0.3) !important;
+  border-left: 2px solid rgba(var(--canvas-color));
+  border-radius: unset;
+  position: absolute;
+  left:   0;
+  top:    0;
+  bottom: 0;
+  height: 100% !important;
+  padding: 10px;
+  writing-mode:vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  
+}
+
+
+.canvas-node:not(.is-editing):is(.cs-my-label-left) .markdown-preview-section {
+  margin-left: 50px;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-label-left) .markdown-preview-view {
+  padding-right: 12px;
+}
+
+
+
+
+.canvas-node:not(.is-editing):is(.cs-my-label-right) .markdown-preview-sizer > div:nth-child(2) {
+  width: 50px !important;
+  background: unset;
+  background-color: rgba(var(--canvas-color), 0.3) !important;
+  border-left: 2px solid rgba(var(--canvas-color));
+  border-radius: unset;
+  position: absolute;
+  right:   0;
+  top:    0;
+  bottom: 0;
+  height: 100% !important;
+  padding: 10px;
+  writing-mode:vertical-rl;
+  text-align: center;
+  
+}
+
+
+.canvas-node:not(.is-editing):is(.cs-my-label-right) .markdown-preview-section {
+  margin-right: 50px;
+}
+
+.canvas-node:not(.is-editing):is(.cs-my-label-right) .markdown-preview-view {
+  padding-left: 12px;
+}
+
+
+
+
+
+
+
+
+
+/* #endregion Card effects */
+
+/* #region Centering */
+
+/* Centers the content section of a card */
+.canvas-node:not(.is-editing).cs-my-content-align-center .canvas-node-container {
+  .markdown-preview-view {
+    display: grid;
+    place-items: center;
+  }
+  .markdown-preview-section {
+    min-height: unset;
+    width: unset;
+    max-width: unset;
+  }
+}
+
+
