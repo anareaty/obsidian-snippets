@@ -85,7 +85,7 @@ async prompt(name) {
 
             onOpen() {
                 const {contentEl} = this
-                contentEl.createEl("h1", {text: "Задача"})
+                contentEl.createEl("h1", {text: "Text"})
 
                 new Setting(contentEl).addText((text) => {
                     text.onChange((value) => {
@@ -94,7 +94,7 @@ async prompt(name) {
                 })
 
                 new Setting(contentEl).addButton((btn) => btn
-                .setButtonText("Сохранить")
+                .setButtonText("Save")
                 .setCta()
                 .onClick(() => {
                     resolve(this.result)
@@ -105,7 +105,7 @@ async prompt(name) {
             onClose() {
                 const {contentEl} = this
                 contentEl.empty()
-                reject("Task not submitted") 
+                reject("Text not submitted") 
             } 
         }
 
@@ -210,7 +210,7 @@ async multiSuggestDouble(header, names, values, existingValues) {
                 document.head.append(modalStyle)
 
                 new Setting(contentEl)
-                .setName("Результат совпадает со всеми значениями")
+                .setName("Result include all values")
                 .addToggle((toggle) => {
                     toggle.setValue(this.result.allValues)
                     toggle.onChange((toggleValue) => {
@@ -220,7 +220,7 @@ async multiSuggestDouble(header, names, values, existingValues) {
 
 
                 new Setting(contentEl).addButton((btn) => btn
-                .setButtonText("Очистить все")
+                .setButtonText("Clean all")
                 .onClick(() => {
                     let toggles = document.querySelectorAll(".select-line .filter-checkbox.is-enabled")
                     for (let toggle of toggles) {
@@ -289,7 +289,7 @@ async multiSuggestDouble(header, names, values, existingValues) {
 
 
                 new Setting(contentEl).addButton((btn) => btn
-                .setButtonText("Сохранить")
+                .setButtonText("Save")
                 .setCta()
                 .onClick(() => {
                     resolve(this.result)
@@ -305,7 +305,7 @@ async multiSuggestDouble(header, names, values, existingValues) {
                 if (this.result) {
                     resolve(this.result)
                 }
-                reject("Task not submitted")
+                reject("Text not submitted")
             } 
         }
 
@@ -663,7 +663,7 @@ async changeProp(prop, propType, multiSelect, pages) {
         values.unshift("all")
 
         let valueNames = values.map((v) => {
-            if (v == "all") return "-все-"
+            if (v == "all") return "-all-"
             else if (v && v.startsWith("[[")) {
                 v = v.replace(/(.*)(\/)([^\/]+)(\]\])/, "$3")
                 .replace(/(\[\[)(.*)(\]\])/, "$2")
@@ -707,7 +707,7 @@ async changeProp(prop, propType, multiSelect, pages) {
 		values.unshift("all")
 
 		let valueNames = values.map((v) => {
-			if (v == "all") return "-все-"
+			if (v == "all") return "-all-"
 			else return v
 		})
 
@@ -775,7 +775,7 @@ async changeProp(prop, propType, multiSelect, pages) {
 
 		let valueNames = multiValues.map((v) => {
 			let valueName
-			if (v == "all") valueName = "-все-"
+			if (v == "all") valueName = "-all-"
 			else if (v.startsWith("[[")) valueName = "⩈ " + v.replace(/(.*)(\/)([^\/]+)(\]\])/, "$3").replace(/(\[\[)(.*)(\]\])/, "$2")
             else valueName = v
 			
@@ -872,7 +872,7 @@ async changeProp(prop, propType, multiSelect, pages) {
 
 		let valueNames = multiValues.map((v) => {
 			let valueName
-			if (v == "all") valueName = "-все-"
+			if (v == "all") valueName = "-all-"
 			else if (v.startsWith("[[")) valueName = "⩈ " + v.replace(/(.*)(\/)([^\/]+)(\]\])/, "$3").replace(/(\[\[)(.*)(\]\])/, "$2")
             else valueName = v
 			return valueName
@@ -935,7 +935,7 @@ async changeProp(prop, propType, multiSelect, pages) {
 		multiValues.unshift("all")
 
 		let valueNames = multiValues.map((v) => {
-			if (v == "all") return "-все-"
+			if (v == "all") return "-all-"
 			else return v
 		})
 
@@ -964,7 +964,7 @@ async changeProp(prop, propType, multiSelect, pages) {
 
 		let valueNames = values.map((v) => {
 			if (!v) return "false"
-			else if (v == "all") return "-все-"
+			else if (v == "all") return "-all-"
 			else return v
 		})
 
@@ -1300,7 +1300,7 @@ styledTaskProgress(p) {
 
 
     if (max > 0) {
-        return "**Прогресс:** <progress class='progress-bar-middle " + color + "' max=100 value=" + percents + "> </progress> **" + value + "** / **" + max + "**"
+        return "**Progress:** <progress class='progress-bar-middle " + color + "' max=100 value=" + percents + "> </progress> **" + value + "** / **" + max + "**"
     } else return ""
 }
 
@@ -1331,7 +1331,7 @@ styledPropProgress(value, max) {
         else if (percents < 100) { color = 'blue-progress'}
         else { color = 'purple-progress'}
 
-        return "**Прогресс**: <progress class='progress-bar-big " + color + "' max=100 value=" + percents + "> </progress> " + percents + "%"
+        return "**Progress**: <progress class='progress-bar-big " + color + "' max=100 value=" + percents + "> </progress> " + percents + "%"
     } else return ""	
 }
 
