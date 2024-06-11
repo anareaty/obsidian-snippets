@@ -1412,7 +1412,11 @@ async createTable(props, pages, filteredPages, paginationNum) {
             }
 
             if (propType == "text" && propItem.imageWidth) {
-                propVal = "![|" + propItem.imageWidth + "](" + propVal + ")"
+		if (propVal && propVal.path) {
+                    propVal = dv.fileLink(propVal.path, true, propItem.imageWidth)
+                } else if (propVal && propVal.startsWith("http")) {
+                    propVal = "![|" + propItem.imageWidth + "](" + propVal + ")"
+                }
             }
 
             if (propType == "boolean") {
