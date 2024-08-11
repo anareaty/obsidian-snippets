@@ -237,4 +237,34 @@ svg.dv-tag {
 }
 
 
+/* Slider */
 
+
+input[type="range"].table-property-slider {
+  
+    background-repeat: no-repeat;
+    height: 8px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: transparent;
+    border: 1px solid var(--background-modifier-border);
+    margin: 0;
+  }
+  
+  
+  input[type="range"].table-property-slider::-webkit-slider-thumb {
+    border-radius: 2px;
+    height: 16px;
+    width: 7px;
+    display: none;
+  }
+  
+  input[type="range"].table-property-slider:hover::-webkit-slider-thumb {
+    display: block;
+  }
+  
+  
+  .edit-button[data-type="date"] {
+    white-space: nowrap;
+    font-size: 0.9em;
+  }
