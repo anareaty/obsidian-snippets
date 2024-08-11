@@ -1685,8 +1685,9 @@ async createList(props, pages, filteredPages, paginationNum) {
     let current = dv.current()
     filteredPages = await this.filterProps(props, current, filteredPages)
 
-    
-    filteredPages = await this.paginate(filteredPages, paginationNum, current)
+    if (paginationNum) {
+        filteredPages = await this.paginate(filteredPages, paginationNum, current)
+    }
      
     for (let page of filteredPages) {
         let link = page.file.link
@@ -1758,7 +1759,11 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
     let current = dv.current()
 
     filteredPages = await this.filterProps(props, current, filteredPages)
-    filteredPages = await this.paginate(filteredPages, paginationNum, current)
+
+    if (paginationNum) {
+        filteredPages = await this.paginate(filteredPages, paginationNum, current)
+    }
+    
 
 
     let tableProps = props.filter(p => p.column)
@@ -2380,10 +2385,6 @@ async editProp (type, path, prop, dv) {
 
 
 
-
-
-
-
 async renderView (settings, props, pages, dv) {
 
   let view = dv.current().view
@@ -2414,7 +2415,9 @@ async renderView (settings, props, pages, dv) {
     await this.filterButtonProps(props, pages)
     await this.changeViewButton(dv)
     await this.refreshButton()
-    await this.paginationBlock(filteredPages, paginationNum)
+    if (paginationNum) {
+	await this.paginationBlock(filteredPages, paginationNum)
+    }
 
   if (!view || view == "table") {
     await this.createTable(props, pages, filteredPages, paginationNum, fullWidth)
@@ -2426,5 +2429,4 @@ async renderView (settings, props, pages, dv) {
     await this.createList(props, pages, filteredPages, paginationNum)
   }
 }
-
 }
