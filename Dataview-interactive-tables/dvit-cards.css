@@ -1,0 +1,260 @@
+/* 
+Based on Minimal theme by Stephan Ango (@kepano)
+(https://github.com/kepano/obsidian-minimal/blob/master/Minimal.css)
+*/
+
+
+
+body
+{
+  --cards-min-width: 140px;
+  --cards-max-width: 1fr;
+  --cards-mobile-width: 120px;
+  --cards-image-height: 400px;
+  --cards-padding: 1.2em;
+  --cards-image-fit: cover;
+  --cards-background: transparent;
+  --cards-border-width: 1px;
+  --cards-aspect-ratio: 2/3;
+  --cards-columns: repeat(auto-fill, minmax(var(--cards-min-width), var(--cards-max-width))); 
+}
+
+
+.cards-horizontal {
+  --cards-min-width: 180px;
+  --cards-columns: repeat(auto-fill, minmax(var(--cards-min-width), var(--cards-max-width))); 
+}
+
+
+.dv-table-wrapper.cards table tbody > tr > td > div:has(img:only-child) {
+  padding: 0;
+}
+  
+
+
+@media (max-width: 400pt) {
+  body {
+    --cards-min-width:var(--cards-mobile-width); } 
+  }
+
+
+.dv-table-wrapper.cards table
+{
+  width: 100%;
+  --table-width: 100%;
+  --table-edge-cell-padding-first: calc(var(--cards-padding)/2);
+  --table-edge-cell-padding-last: calc(var(--cards-padding)/2);
+  --table-cell-padding: calc(var(--cards-padding)/3) calc(var(--cards-padding)/2);
+  line-height: 1.3; 
+  margin-block-start: 0;
+
+}
+  .dv-table-wrapper.cards table tbody {
+    clear: both;
+    padding: 0.5rem 0;
+    display: grid;
+    grid-template-columns: var(--cards-columns);
+    grid-column-gap: 0.75rem;
+    grid-row-gap: 0.75rem; }
+
+  .dv-table-wrapper.cards table > tbody > tr {
+    background-color: var(--cards-background);
+    border: var(--cards-border-width) solid var(--background-modifier-border);
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0 0 calc(var(--cards-padding)/3) 0;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: box-shadow 0.15s linear;
+    max-width: var(--cards-max-width);
+    height: auto; }
+
+    .dv-table-wrapper.cards table tbody > tr > td:first-child {
+      font-weight: var(--bold-weight);
+      border: none; }
+    .dv-table-wrapper.cards table tbody > tr > td:nth-child(2) {
+      font-size: 0.9em !important;
+      font-weight: var(--bold-weight);
+      font-family: Merriweather;
+      padding-top:10px !important;
+      padding-bottom:5px !important;
+    }
+    .dv-table-wrapper.cards.cards-small table tbody > tr > td:nth-child(2) {
+      font-size: 0.8em !important;
+      font-family: var(--font-text);
+      padding-top:5px !important;
+      padding-bottom:0px !important;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .dv-table-wrapper.cards table tbody > tr > td:first-child a {
+      display: block; }
+
+    .dv-table-wrapper.cards table tbody > tr > td:last-child {
+      border: none; 
+    }
+
+    .dv-table-wrapper.cards table tbody > tr > td:has(.align-bottom) {
+      margin-top: auto !important; 
+    }
+
+    .dv-table-wrapper.cards table tbody > tr > td:not(:first-child) {
+      font-size: calc(var(--table-text-size) * .9);
+      color: var(--text-muted); }
+    .dv-table-wrapper.cards table tbody > tr > td > * {
+      padding: calc(var(--cards-padding)/3) 0; }
+    .dv-table-wrapper.cards table tbody > tr > td:not(:last-child):not(:first-child) {
+      padding: 4px 0;
+      border:none;
+      width: calc(100% - var(--cards-padding));
+      margin: 0 calc(var(--cards-padding)/2); }
+    .dv-table-wrapper.cards table tbody > tr > td a {
+      text-decoration: none; }
+    .dv-table-wrapper.cards table tbody > tr > td > button {
+      width: 100%;
+      margin: calc(var(--cards-padding)/2) 0; }
+    .dv-table-wrapper.cards table tbody > tr > td:last-child > button {
+      margin-bottom: calc(var(--cards-padding)/6); }
+    .dv-table-wrapper.cards table tbody > tr > td > ul {
+      width: 100%;
+      padding: 0.25em 0 !important;
+      margin: 0 auto !important; }
+    .dv-table-wrapper.cards table tbody > tr > td:has(img) {
+      padding: 0 !important;
+      background-color: var(--background-secondary);
+      display: block;
+      margin: 0;
+      width: 100%; }
+    .dv-table-wrapper.cards table tbody > tr > td img {
+      aspect-ratio: var(--cards-aspect-ratio);
+      width: 100%;
+      object-fit: var(--cards-image-fit);
+      max-height: var(--cards-image-height);
+      background-color: var(--background-secondary);
+      vertical-align: bottom; }
+
+.markdown-source-view.mod-cm6.dv-table-wrapper.cards table > tbody > tr > td,
+.trim-cols .dv-table-wrapper.cards table tbody > tr > td {
+  white-space: normal; }
+
+
+/* ------------------- */
+/* Sorting menu */
+
+.dv-table-wrapper.cards table thead {
+  user-select: none;
+  width: 180px;
+  display: block;
+  float: right;
+  position: relative;
+  text-align: right;
+  height: 24px;
+  padding-bottom: 0px; }
+.dv-table-wrapper.cards table thead:hover:after {
+  background-color: var(--background-modifier-hover); }
+.dv-table-wrapper.cards table thead:hover:before {
+  background-color: var(--text-muted); }
+.dv-table-wrapper.cards table thead:after,
+.dv-table-wrapper.cards table thead:before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 10px;
+  height: 16px;
+  cursor: var(--cursor);
+  text-align: right;
+  padding: var(--size-4-1) var(--size-4-2);
+  margin-bottom: 2px;
+  border-radius: var(--radius-s);
+  font-weight: 500;
+  font-size: var(--font-adaptive-small); }
+.dv-table-wrapper.cards table thead:before {
+  background-color: var(--text-faint);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 16px;
+  -webkit-mask-position: center center;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 100 100"><path fill="currentColor" d="M49.792 33.125l-5.892 5.892L33.333 28.45V83.333H25V28.45L14.438 39.017L8.542 33.125L29.167 12.5l20.625 20.625zm41.667 33.75L70.833 87.5l-20.625 -20.625l5.892 -5.892l10.571 10.567L66.667 16.667h8.333v54.883l10.567 -10.567l5.892 5.892z"></path></svg>'); }
+.dv-table-wrapper.cards table thead > tr {
+  top: -1px;
+  position: absolute;
+  display: none;
+  z-index: 9;
+  border: 1px solid var(--background-modifier-border-hover);
+  background-color: var(--background-secondary);
+  box-shadow: var(--shadow-s);
+  padding: 6px;
+  border-radius: var(--radius-m);
+  flex-direction: column;
+  margin: 24px 0 0 0;
+  width: 100%; }
+.dv-table-wrapper.cards table thead:hover > tr {
+  display: flex;
+  height: auto; }
+.dv-table-wrapper.cards table thead > tr > th {
+  display: block;
+  padding: 3px 30px 3px 6px !important;
+  border-radius: var(--radius-s);
+  width: 100%;
+  font-weight: 400;
+  color: var(--text-normal);
+  cursor: var(--cursor);
+  border: none;
+  font-size: var(--font-ui-small); }
+.dv-table-wrapper.cards table thead > tr > th[sortable-style="sortable-asc"],
+.dv-table-wrapper.cards table thead > tr > th[sortable-style="sortable-desc"] {
+  color: var(--text-normal); }
+.dv-table-wrapper.cards table thead > tr > th:hover {
+  color: var(--text-normal);
+  background-color: var(--background-modifier-hover); }
+
+
+
+/* ------------------- */
+/* Helper classes */
+.dv-table-wrapper.cards.cards-16-9,
+.cards-horizontal {
+  --cards-aspect-ratio: 16/9; }
+.dv-table-wrapper.cards.cards-1-1 {
+  --cards-aspect-ratio: 1/1; }
+.dv-table-wrapper.cards.cards-2-1 {
+  --cards-aspect-ratio: 2/1; }
+.dv-table-wrapper.cards.cards-2-3 {
+  --cards-aspect-ratio: 2/3; }
+.dv-table-wrapper.cards.cards-cols-1,
+.is-mobile .dv-table-wrapper.cards.m-cards-cols-1 {
+  --cards-columns: repeat(1, minmax(0, 1fr)); }
+.dv-table-wrapper.cards.cards-cols-2 {
+  --cards-columns: repeat(2, minmax(0, 1fr)); }
+.dv-table-wrapper.cards.cards-cover {
+  --cards-image-fit: cover; }
+.dv-table-wrapper.cards.cards-align-bottom table tbody > tr > td:last-child {
+  margin-top: auto; }
+
+@media (max-width: 400pt) {
+  .dv-table-wrapper.cards table tbody > tr > td:not(:first-child) {
+    font-size: 80%; } }
+@media (min-width: 400pt) {
+  .cards-cols-3 {
+    --cards-columns: repeat(3, minmax(0, 1fr)); }
+
+  .cards-cols-4 {
+    --cards-columns: repeat(4, minmax(0, 1fr)); }
+
+  .cards-cols-5 {
+    --cards-columns: repeat(5, minmax(0, 1fr)); }
+
+  .cards-cols-6 {
+    --cards-columns: repeat(6, minmax(0, 1fr)); }
+
+  .cards-cols-7 {
+    --cards-columns: repeat(7, minmax(0, 1fr)); }
+
+  .cards-cols-8 {
+    --cards-columns: repeat(8, minmax(0, 1fr)); } }
+
+
+
+
