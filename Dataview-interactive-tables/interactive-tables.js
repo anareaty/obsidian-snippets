@@ -1970,9 +1970,7 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
     /* Push property and everything after it to the bottom of the card */
 
-            if (propItem.alignBottom) {
-                propVal = "<span class='align-bottom'>" + propVal + "</span>"
-            }
+            
             
 
 
@@ -2090,19 +2088,13 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                     propVal.setAttribute('data-prop', propMax)
                 }
 
-                if (propItem.alignBottom) {
-                    propVal.classList.add("align-bottom")
-                } 
+                
             }
 
 
-
-
-            
-
-
-
-
+                if (propItem.alignBottom) {
+                    propVal.classList.add("align-bottom")
+                } 
 
             return propVal
         }))
@@ -2380,6 +2372,14 @@ async editProp (type, path, prop, dv) {
         }, 250)
     }
 }
+
+
+
+
+
+
+
+
 
 
 
