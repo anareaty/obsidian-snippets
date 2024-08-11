@@ -1355,43 +1355,38 @@ async newEntryButton(dv, args) {
 
     const { noteName, noteTemplate, noteFolder } = args
 
-	let template = await app.vault.getFiles().find(f => f.basename == noteTemplate)
-	let data = ""
-
-	if (template) {
-		data = await app.vault.read(template)
-	}
-
-	const checkIfExist = (num) => {
-		let numString = ""
-		if (num > 0) {numString = " " + num}
-
+    const checkIfExist = (num) => {
+        let numString = ""
+        if (num > 0) {numString = " " + num}
         let path = noteName + numString + ".md"
 
         if (noteFolder && noteFolder != "") {
             path = noteFolder + "/" + noteName + numString + ".md"
         }
-        
 
-		let checkPath = app.vault.getAbstractFileByPathInsensitive(path)
+        let checkPath = app.vault.getAbstractFileByPathInsensitive(path)
 
-	    if (checkPath) {
-			return checkIfExist(num + 1)
-		} else return path
+        if (checkPath) {
+            return checkIfExist(num + 1)
+        } else return path
 	}
 
-	
-	const createNote = async (path, data) => {
-		let file = await app.vault.create(path, data)
-		app.workspace.getLeaf().openFile(file)
-	}
+    const createNote = async () => {
+        let template = await app.vault.getFiles().find(f => f.basename == noteTemplate)
+        let data = ""
+        if (template) {
+            data = await app.vault.read(template)
+        }
+        let path = checkIfExist(0)
+        let file = await app.vault.create(path, data)
+	app.workspace.getLeaf().openFile(file)
+    }
 
     let button = document.createElement("button")
     button.append("+")
     button.className = "dvit-button"
     button.onclick = async () => {
-        let path = checkIfExist(0)
-        await createNote(path, data)    
+        await createNote()    
     }
     dv.container.append(button)
 }
