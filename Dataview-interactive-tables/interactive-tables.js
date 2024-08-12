@@ -1504,6 +1504,9 @@ async searchButton() {
     }
     button.onclick = async () => {
         await app.fileManager.processFrontMatter(file, fm => {
+            if (current.show_search) {
+                delete fm.search
+            }
             fm.show_search = !fm.show_search
         })
         setTimeout(async() => {
@@ -1521,6 +1524,7 @@ async searchInput() {
     let search = document.createElement("input")
     search.classList.add("dvit-search-input")
     search.value = current.search
+    if (search.value) search.value = ""
 
 
     search.addEventListener("keydown", (e) => {
@@ -1880,7 +1884,7 @@ async createList(props, pages, filteredPages, paginationNum) {
 async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsView) {
     const {dv} = this
 
-   // this.props = props
+    this.props = props
     let current = dv.current()
 
     filteredPages = await this.filterProps(props, current, filteredPages)
@@ -2560,13 +2564,13 @@ async editProp (type, path, prop, dv) {
     } else if (type == "select") {
 
         let values = this.getValues(prop)
- /*
+ 
         let propItem = this.props.find(p => p.prop == prop)
         let options = propItem.selectOptions
         if (options) {
             values = [...options]
         }
-    */
+    
 
         values.unshift("+ add new option")
 
