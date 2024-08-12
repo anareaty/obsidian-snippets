@@ -865,6 +865,10 @@ async filterButton(p, pages, className) {
         if (current[propName] && current[propName] != "all" && current[propName].length != 0) {
             buttonClass = "dvit-button button-selected"
         }
+        
+        if (propName == "filter_file.tasks" && current[propName]) {
+            buttonClass = "dvit-button button-selected"
+        }
     } else {
         buttonClass = className
     }
@@ -988,7 +992,7 @@ async changeProp(p, pages) {
 
 
 
-    let values = pages.map(p => getVal(p, prop))
+        let values = pages.map(p => getVal(p, prop))
 
         values = values.map(v => {
             if (v && v.path) {
@@ -1317,7 +1321,7 @@ async changeProp(p, pages) {
 		let currentFile = app.vault.getAbstractFileByPath(current.file.path)
 		let propName = "filter_" + prop
 
-    let values = ["all", "-", "false", "true"]
+        let values = ["all", "-", "false", "true"]
 		let val = await suggester(values)
 		if (val == "false") val = false
 		if (val == "true") val = true
@@ -1328,6 +1332,40 @@ async changeProp(p, pages) {
 		})
 
 	}
+
+
+    if (p.prop == "file.tasks") {
+        let propName = "filter_file.tasks"
+        let filter = current[propName]
+        let currentFile = await app.vault.getAbstractFileByPath(current.file.path)
+        let values = ["all", "completed", "not completed"]
+
+
+         let valueNames = values.map((v) => {
+            if (v == "all") return "-all-"
+            if (filter == v) {
+				v = v + " ✔"
+            }
+            return v
+        })
+
+
+
+        let val = await suggester(values, valueNames)
+
+        if (val == "all") {
+            await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
+                delete frontmatter[propName]
+            })
+            
+        } else {
+            await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
+                frontmatter[propName] = val
+            })
+        }
+    }
+
+
     setTimeout(async() => {
 	        await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
 	    }, 250)
@@ -1379,7 +1417,7 @@ async newEntryButton(dv, args) {
         }
         let path = checkIfExist(0)
         let file = await app.vault.create(path, data)
-	app.workspace.getLeaf().openFile(file)
+		app.workspace.getLeaf().openFile(file)
     }
 
     let button = document.createElement("button")
@@ -1389,7 +1427,11 @@ async newEntryButton(dv, args) {
         await createNote()    
     }
     dv.container.append(button)
+
+
 }
+
+
 
 
 
@@ -1675,6 +1717,11 @@ getDisplay(link) {
 }
 
 
+
+
+
+
+
 async createList(props, pages, filteredPages, paginationNum) {
    const {dv} = this
     let current = dv.current()
@@ -1751,6 +1798,8 @@ async createList(props, pages, filteredPages, paginationNum) {
 
 async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsView) {
     const {dv} = this
+
+   // this.props = props
     let current = dv.current()
 
     filteredPages = await this.filterProps(props, current, filteredPages)
@@ -2068,6 +2117,7 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
                 let propSliderVal = propItem.propVal
                 let propMax = propItem.propMax
+
                 let max = p[propMax]
 
                 if (max) {
@@ -2091,6 +2141,53 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                     propVal.classList.add("align-bottom")
                 } 
 
+
+                if (propName == "file.tasks") {
+                    if (p.file && p.file.tasks) {
+                        let tasks = p.file.tasks
+
+                        let filterStatus = dv.current()["filter_file.tasks"]
+
+                        if (filterStatus == "completed") {
+                            tasks = tasks.filter(t => t.status == "x")
+                        }
+
+                        if (filterStatus == "not completed") {
+                            tasks = tasks.filter(t => t.status == " ")
+                        }
+
+                        let taskList = document.createElement("ul")
+                        taskList.className = "contains-task-list has-list-bullet"
+                        for (let task of tasks) {
+                            let taskLine = document.createElement("li")
+                            
+                            taskLine.classList.add("task-list-item")
+                            
+
+                            taskLine.setAttribute('data-task', task.status)
+
+                            let checkbox = document.createElement("input")
+                            checkbox.type = "checkbox"
+                            checkbox.classList.add("task-list-item-checkbox")
+                            checkbox.classList.add("file-task-checkbox")
+
+                            checkbox.setAttribute('data-path', p.file.path)
+                            checkbox.setAttribute('data-task-line', task.line)
+
+                            if (task.checked) {
+                                taskLine.classList.add("is-checked")
+                                checkbox.setAttribute('checked','checked')
+                            }
+                            
+                            
+                            taskLine.append(checkbox)
+                            taskLine.append(task.text.replaceAll("\n", ""))
+                            taskList.append(taskLine)
+                        }
+                        propVal = taskList
+                    }
+                }
+
             return propVal
         }))
     
@@ -2098,7 +2195,12 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
 
     let markdownTable = dv.markdownTable(headers, rows)
+
+
+
+
     let tableWrapper = dv.paragraph(markdownTable)
+
 
     tableWrapper.classList.add("dv-table-wrapper")
 
@@ -2118,6 +2220,9 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
             tableWrapper.classList.add("cards-" + cardsView.position)
         }
     }
+
+
+    
 
 
 
@@ -2179,7 +2284,51 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
             })
         }
     }
+
+
+
+    let taskCheckboxes = document.querySelectorAll(".file-task-checkbox")
+    for (let checkbox of taskCheckboxes) {
+        
+        checkbox.onchange = async() => {
+            
+            let path = checkbox.getAttribute("data-path")
+            let lineNum = checkbox.getAttribute("data-task-line")
+            let file = app.vault.getAbstractFileByPath(path)
+            let content = await app.vault.cachedRead(file)
+            let lines = content.split("\n")
+            let line = lines[lineNum]
+
+            if (checkbox.checked) {
+                line = line.replace("- [ ]", "- [x]")
+            } else {
+                line = line.replace("- [x]", "- [ ]")
+            }
+
+            lines[lineNum] = line
+
+            let newContent = lines.join("\n")
+
+            await app.vault.modify(file, newContent)
+
+            setTimeout(async() => {
+            await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
+        }, 250)
+            
+            
+        }
+        
+    }
+    
 }
+
+
+
+
+
+
+
+
 
 
 /* Functions to edit properties */
@@ -2317,6 +2466,13 @@ async editProp (type, path, prop, dv) {
     } else if (type == "select") {
 
         let values = this.getValues(prop)
+ /*
+        let propItem = this.props.find(p => p.prop == prop)
+        let options = propItem.selectOptions
+        if (options) {
+            values = [...options]
+        }
+    */
 
         values.unshift("+ add new option")
 
@@ -2424,4 +2580,5 @@ async renderView (settings, props, pages, dv) {
     await this.createList(props, pages, filteredPages, paginationNum)
   }
 }
+
 }
