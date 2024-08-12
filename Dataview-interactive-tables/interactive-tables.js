@@ -556,6 +556,19 @@ async filterProps(props, current, pages) {
 	for (let p of props) {
         pages = await this.filter(p, current, pages)
 	}
+
+    let search = current.search
+
+    if (search && search.length > 0) {
+        let keyWords = search.split(" ")
+
+        for (let key of keyWords) {
+            if (key.length > 0) {
+                pages = pages.filter(p => p.file.name.toLowerCase().includes(key.toLowerCase()))
+            }
+        }
+    }
+
 	return pages
 }
 
@@ -563,6 +576,7 @@ async filterProps(props, current, pages) {
 
 
 async filter(p, current, filteredPages) {
+    
     const dv = this.dv
     const getVal = this.getVal
     let { prop, multiSelect } = p
@@ -578,26 +592,26 @@ async filter(p, current, filteredPages) {
 	
 
 
-    
+   
 
 
 	if (propType == "text" || propType == "number") {
 		if (filter == "-") {
 		  return filteredPages.filter(p => !getVal(p, prop))
-    } else if (isLink(filter)) {
+        } else if (isLink(filter)) {
           return filteredPages.filter(p => containsPath(getVal(p, prop), filter.path))
-    } else if (filter && filter != "all") {
+        } else if (filter && filter != "all") {
         if (prop == "file.folder") {
             return filteredPages.filter(p => getVal(p, prop).startsWith(filter))
         } else return filteredPages.filter(p => getVal(p, prop) == filter)
-    } else {
+        } else {
           return filteredPages 
-    }
+        }
 	}
 
+ 
 
-
-    else if (propType == "multitext") {
+    if (propType == "multitext") {
 
         if (multiSelect) {
 
@@ -733,7 +747,7 @@ async filter(p, current, filteredPages) {
 
 
 
-	else if (propType == "checkbox") {
+	if (propType == "checkbox") {
 		if (filter == "-") {
 	    	return filteredPages.filter(p => getVal(p, prop) === undefined)
 		} else if (filter === false) {
@@ -743,8 +757,9 @@ async filter(p, current, filteredPages) {
 		} else return filteredPages
 	}
 	
+
 	
-	else if (propType == "date") {
+	if (propType == "date") {
 		if (filter == "-") {
 	    	return filteredPages.filter(p => getVal(p, prop) === undefined)
 		} else if (filter != "all" && filter != null) {
@@ -763,7 +778,7 @@ async filter(p, current, filteredPages) {
 	
 	
 	
-	else if (propType == "datetime") {
+	if (propType == "datetime") {
 		if (filter == "-") {
 	    	return filteredPages.filter(p => getVal(p, prop) === undefined)
 		} else if (filter != "all" && filter != null) {
@@ -783,6 +798,8 @@ async filter(p, current, filteredPages) {
 
 
 
+
+    
 
 
     return filteredPages
@@ -1463,6 +1480,65 @@ async refreshButton() {
         await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
     }
     dv.container.append(button)
+}
+
+
+
+async searchButton() {
+  const {dv} = this
+  let current = dv.current()
+  let file = app.vault.getAbstractFileByPath(current.file.path)
+    let button = document.createElement("button")
+
+    let iconEl = obsidian.getIcon("search")
+    let iconWrapper = document.createElement("span")
+    iconWrapper.classList.add("search-button-icon")
+    iconWrapper.append(iconEl)
+    
+    button.append(iconWrapper)
+    button.className = "dvit-button dvit-search-button"
+
+
+    if (current.show_search) {
+        button.classList.add("button-selected")
+    }
+    button.onclick = async () => {
+        await app.fileManager.processFrontMatter(file, fm => {
+            fm.show_search = !fm.show_search
+        })
+        setTimeout(async() => {
+            await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
+        }, 250)
+    }
+    dv.container.append(button)
+}
+
+
+async searchInput() {
+  const {dv} = this
+  let current = dv.current()
+  let file = app.vault.getAbstractFileByPath(current.file.path)
+    let search = document.createElement("input")
+    search.classList.add("dvit-search-input")
+    search.value = current.search
+
+
+    search.addEventListener("keydown", (e) => {
+        if (e.key == "Enter") {
+            setTimeout(async() => {
+	            await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
+	        }, 250)
+        }
+    })
+
+
+    search.oninput = async (e) => {
+        
+        await app.fileManager.processFrontMatter(file, fm => {
+            fm.search = search.value
+        })
+    }
+    dv.container.append(search)
 }
 	
 	
@@ -2584,9 +2660,19 @@ async renderView (settings, props, pages, dv) {
     await this.filterButtonProps(props, pages)
     await this.changeViewButton(dv)
     await this.refreshButton()
+    
     if (paginationNum) {
 	await this.paginationBlock(filteredPages, paginationNum)
     }
+    
+    await this.searchButton()
+
+
+    if (dv.current().show_search) {
+        await this.searchInput()
+    }
+
+    
 
   if (!view || view == "table") {
     await this.createTable(props, pages, filteredPages, paginationNum, fullWidth)
@@ -2597,6 +2683,14 @@ async renderView (settings, props, pages, dv) {
   } else if (view == "list") {
     await this.createList(props, pages, filteredPages, paginationNum)
   }
+
+
+
+  let search = document.querySelector(".dvit-search-input")
+  if(search) {
+    search.focus()
+  }
+  
 }
 
 }
