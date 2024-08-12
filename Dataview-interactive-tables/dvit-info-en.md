@@ -143,6 +143,8 @@ Here are some options you can add to the property object:
 
 Besides normal properties you can also use some file properties, like "file.link" or "file.path". Note that most of them are not editable for now, except for the note name. You can only access the first level file properties. 
 
+You can use `file.tasks` property to get the list of file tasks with active checkboxes, and the filter button will allow you to switch between seing all tasks, just completed or just not completed. But the tasks support is very minimal for now and can be a little buggy.
+
 There are additional two things you can put to the "props" array, that are not the properties. There are task progress and properties slider.
 
 Task progress allow you to see the progress bar of all the tasks in the note. It is described like this:
