@@ -1,6 +1,7 @@
 /* Icons */
 
 .filter-button-icon,
+.search-button-icon,
 .change-view-button-icon,
 .inline-icon {
     --icon-size: 1em;
@@ -267,4 +268,18 @@ input[type="range"].table-property-slider {
   .edit-button[data-type="date"] {
     white-space: nowrap;
     font-size: 0.9em;
+  }
+
+
+  /* Search */
+
+  .dvit-search-input {
+    border: 1px solid var(--background-modifier-border);
+    height: var(--input-height);
+    margin-left: 3px;
+    border-radius: 4px;
+  }
+
+  .dvit-button.dvit-search-button {
+    margin-left: 5px;
   }
