@@ -23,6 +23,7 @@ async suggester(values, names) {
                 if (text.startsWith("[[")) {
                     text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5")
                         .replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
+                        .replace(/(.*\|)(.*)/, "$2")
                     let iconWrapper = el.createEl("span", { cls: "inline-icon" })
                     let textEl = el.createEl("span", {text: text})
                     setIcon(iconWrapper, "link")
@@ -56,7 +57,9 @@ async fuzzySuggester(values, names) {
                     text = names[values.indexOf(val)]
                 }
                 if (text.startsWith("[[")) {
-                    text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5").replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
+                    text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5")
+                    .replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
+                    
                 }
                 return text
             }
@@ -66,7 +69,9 @@ async fuzzySuggester(values, names) {
                     text = names[values.indexOf(text)]
                 }
                 if (text.startsWith("[[")) {
-                    text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5").replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
+                    text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5")
+                    .replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
+                    .replace(/(.*\|)(.*)/, "$2")
                     let iconWrapper = el.createEl("span", { cls: "inline-icon" })
                     let textEl = el.createEl("span", {text: text})
                     setIcon(iconWrapper, "link")
@@ -923,7 +928,7 @@ getVal(page, prop) {
         val = val[level]
       }
     }
-  if (prop == "tags") val = page.file.tags
+  if (prop == "tags") val = page.file.etags
   return val
 }
 
@@ -2000,7 +2005,7 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
             /* Show tags in one line */
 
             if (propName == "tags") {
-                propVal = this.joinTags(p.file.tags)
+                propVal = this.joinTags(p.file.etags)
             }
 
 
@@ -2414,6 +2419,16 @@ async editProp (type, path, prop, dv) {
 
     }
 
+    if (Array.isArray(prevVal)) {
+        prevVal = prevVal.map(p => {
+            if (this.isLink(p)) {
+                p = "[[" + p.path + "|" + this.getDisplay(p) + "]]"
+            }
+            return p
+        })
+
+    }
+
     let val
 
     if (type == "text") {
@@ -2432,10 +2447,13 @@ async editProp (type, path, prop, dv) {
 
         let notAddedValues = values.filter(v => {
             for (let a of addedValues) {
-                if (v == a || v == "") return false
+                if (v == a) return false
             }
+            if (v == "") return false
             return true
         })
+
+
 
         notAddedValues.unshift("+ add new option")
         
