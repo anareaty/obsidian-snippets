@@ -2599,7 +2599,11 @@ async editProp (type, path, prop, dv) {
         let propType = this.getPropType(prop)
 
         if (propType == "multitext") {
-            val = [val]
+            if (val != "") {
+               val = [val] 
+            } else {
+                val = []
+            }
         }
 
 
