@@ -2,6 +2,8 @@
 
 https://github.com/user-attachments/assets/0855c051-33db-4808-ac86-1928d32c5353
 
+[Manual in english](https://github.com/anareaty/obsidian-snippets/blob/main/Dataview-interactive-tables/dvit-info-en.md)
+
 ## Описание
 
 Этот скрипт предназначен для использования в приложении Obsidian с плагином Dataview (также требуется плагин CustomJS). С помощью Dataview вы можете создавать таблицы и списки из заметок, но их нельзя редактировать. Этот скрипт позволяет вам создавать динамические интерактивные представления с несколькими дополнительными опциями:
