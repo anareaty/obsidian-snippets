@@ -181,7 +181,7 @@ const settings = {
 .metadata-property[data-property-key="view"],
 .metadata-property[data-property-key="pagination"],
 .metadata-property[data-property-key="search"],
-.metadata-property[data-property-key="show-search"] {
+.metadata-property[data-property-key="show_search"] {
   display: none;
 }
 ```
