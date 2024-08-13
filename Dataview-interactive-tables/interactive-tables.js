@@ -1524,7 +1524,7 @@ async searchInput() {
     let search = document.createElement("input")
     search.classList.add("dvit-search-input")
     search.value = current.search
-    if (search.value) search.value = ""
+    if (!current.search) search.value = ""
 
 
     search.addEventListener("keydown", (e) => {
