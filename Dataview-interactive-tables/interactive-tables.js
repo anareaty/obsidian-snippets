@@ -1884,6 +1884,8 @@ async createList(props, pages, filteredPages, paginationNum) {
 async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsView) {
     const {dv} = this
 
+        
+
     this.props = props
     let current = dv.current()
 
@@ -2046,6 +2048,8 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
             if (propType == "file prop") {
                 propVal = p.file[propName]
+
+                
                 
                 if (propVal && propItem.slice) {
                   if (propVal.path) {
@@ -2113,7 +2117,9 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
                 let editButton = document.createElement("div")
                 editButton.classList.add("edit-button")
-                
+
+       
+
             if (!propName.startsWith("file.")) {
 
                 if (propItem.editButton == "select" && (propType == "text" || propType == "multitext")) {
@@ -2156,6 +2162,9 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                 editButton.setAttribute('data-type', 'file name')
                 //propVal = "<div>" + propVal + "</div>"
             }   
+
+
+            
 
             
 
@@ -2273,16 +2282,15 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                     }
                 }
 
+
+
             return propVal
         }))
     
 
 
-
     let markdownTable = dv.markdownTable(headers, rows)
-
-
-
+    markdownTable = markdownTable.replaceAll("&amp;", "&")
 
     let tableWrapper = dv.paragraph(markdownTable)
 
