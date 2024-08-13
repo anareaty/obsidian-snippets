@@ -1,5 +1,7 @@
 # Dataview interactive tables
 
+https://github.com/user-attachments/assets/0855c051-33db-4808-ac86-1928d32c5353
+
 ## Description
 
 This script is intended to be used in the Obsidian app with the Dataview plugin (also CustomJS plugin is required). With Dataview you can create tables and lists from the notes, but they are not editable. This script allows you to create dynamic interactive views with several additional options:
