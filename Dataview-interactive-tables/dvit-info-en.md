@@ -1,8 +1,8 @@
+[Инструкция на русском языке](https://github.com/anareaty/obsidian-snippets/blob/main/Dataview-interactive-tables/dvit-info-ru.md)
+
 # Dataview interactive tables
 
 https://github.com/user-attachments/assets/0855c051-33db-4808-ac86-1928d32c5353
-
-[Инструкция на русском языке](https://github.com/anareaty/obsidian-snippets/blob/main/Dataview-interactive-tables/dvit-info-ru.md)
 
 ## Description
 
