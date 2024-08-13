@@ -131,7 +131,7 @@ Here are some options you can add to the property object:
 
 `multiSelect: true` — allows selecting multiple values in filtering modal. Only works with the list properties.
 
-`editButton: select` — allows to select only one of existing options in editing modal. Works with text of list properties.
+`editButton: "select"` — allows to select only one of existing options in editing modal. Works with text of list properties.
 
 `slice: [0, 2],` — only show the first two symbols of property value (useful for properties starting with emojis).
 
