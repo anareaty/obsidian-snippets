@@ -73,21 +73,17 @@ body
     .dv-table-wrapper.cards table tbody > tr > td:first-child {
       font-weight: var(--bold-weight);
       border: none; }
-    .dv-table-wrapper.cards table tbody > tr > td:nth-child(2) {
-      font-size: 0.9em !important;
-      font-weight: var(--bold-weight);
-      font-family: Merriweather;
-      padding-top:10px !important;
-      padding-bottom:5px !important;
+
+
+    .dv-table-wrapper.cards table tbody > tr > td:has(div[data-prop="file.link"]) {
+      font-size: 1em !important;
+      font-family: serif;
+      padding-top: 5px !important;
+      padding-bottom: 5px !important;
     }
-    .dv-table-wrapper.cards.cards-small table tbody > tr > td:nth-child(2) {
-      font-size: 0.8em !important;
-      font-family: var(--font-text);
-      padding-top:5px !important;
-      padding-bottom:0px !important;
-      padding-left: 5px;
-      padding-right: 5px;
-    }
+
+    
+
 
     .dv-table-wrapper.cards table tbody > tr > td:first-child a {
       display: block; }
