@@ -373,6 +373,7 @@ async dateInput(name, defaultVal) {
         }
         new this.MyTextInputModal(app).open()  
     }).catch((e) => {console.log(e)})
+
     return data
 }
 
@@ -539,11 +540,15 @@ sortByProp(pages, prop, dir) {
 
     if (prop && !prop.startsWith("file.")) {
         pages = pages.sort(p => p[prop], dir)
-    } else if (prop.startsWith("file.")) {
+    } else if (prop && prop.startsWith("file.")) {
         prop = prop.replace("file.", "")
 
         pages = pages.sort(p => p.file[prop], dir)
     }
+
+ 
+
+    
 
 
     return pages
@@ -2683,6 +2688,8 @@ async editProp (type, path, prop, dv) {
         val = await this.dateInput(prop, prevVal)
 
         if (val === undefined) val = prevVal
+
+        if (val == "") val = null
     } 
 
     if (val !== prevVal) {
