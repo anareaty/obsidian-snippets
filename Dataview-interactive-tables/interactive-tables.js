@@ -2456,10 +2456,11 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
 
     let headerButtons = document.querySelectorAll(".header-sorting-button")
     for (let button of headerButtons) {
-        button.onclick = async () => {
-            let prop = button.getAttribute("data-prop")
-            let file = app.vault.getAbstractFileByPath(dv.current().file.path)
 
+        let prop = button.getAttribute("data-prop")
+        let file = app.vault.getAbstractFileByPath(dv.current().file.path)
+
+        button.onclick = async () => {
             await app.fileManager.processFrontMatter(file, fm => {
                 if (fm.sort == prop) {
                     if (!fm.sort_direction || fm.sort_direction == "desc") {
@@ -2477,6 +2478,20 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
             setTimeout(async() => {
                 await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
             }, 250)
+        }
+
+
+        button.onmousedown = async (e) => {
+            if (e.button == 2) {
+                await app.fileManager.processFrontMatter(file, fm => {
+                    delete fm.sort
+                    delete fm.sort_direction
+                })
+
+                setTimeout(async() => {
+                    await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
+                }, 250)
+            }
         }
     }
     
