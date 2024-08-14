@@ -535,7 +535,19 @@ getPropType(prop) {
 
 
 
+sortByProp(pages, prop, dir) {
 
+    if (prop && !prop.startsWith("file.")) {
+        pages = pages.sort(p => p[prop], dir)
+    } else if (prop.startsWith("file.")) {
+        prop = prop.replace("file.", "")
+
+        pages = pages.sort(p => p.file[prop], dir)
+    }
+
+
+    return pages
+}
 
 
 
@@ -551,6 +563,9 @@ getPropType(prop) {
 
 
 async filterProps(props, current, pages) {
+
+    
+
     props = props.filter(prop => prop.type != "no prop")
 
 	for (let p of props) {
@@ -568,6 +583,9 @@ async filterProps(props, current, pages) {
             }
         }
     }
+
+
+
 
 	return pages
 }
@@ -1913,9 +1931,24 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                 icon = iconEl.outerHTML
             } else icon = "NO ICON"
         }
-        
-      if (propItem.name) return icon + propItem.name
-      else return icon + propItem.prop
+
+      let prop = propItem.prop
+
+      if (prop == "slider") {
+        prop = propItem.propVal
+      }
+
+      let headerButton = document.createElement("div")
+      headerButton.classList.add("header-sorting-button")
+      headerButton.setAttribute("data-prop", prop)
+
+      if (propItem.name) {
+        headerButton.innerHTML = icon + propItem.name
+      } else {
+        headerButton.innerHTML = icon + propItem.prop
+      }
+
+      return headerButton.outerHTML
 
     })
 
@@ -2412,6 +2445,35 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
         }
         
     }
+
+
+
+
+    let headerButtons = document.querySelectorAll(".header-sorting-button")
+    for (let button of headerButtons) {
+        button.onclick = async () => {
+            let prop = button.getAttribute("data-prop")
+            let file = app.vault.getAbstractFileByPath(dv.current().file.path)
+
+            await app.fileManager.processFrontMatter(file, fm => {
+                if (fm.sort == prop) {
+                    if (!fm.sort_direction || fm.sort_direction == "desc") {
+                        fm.sort_direction = "asc"
+                    } else {
+                        fm.sort_direction = "desc"
+                    }
+                    
+                } else {
+                    fm.sort = prop
+                    fm.sort_direction = "asc"
+                }
+            })
+
+            setTimeout(async() => {
+                await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
+            }, 250)
+        }
+    }
     
 }
 
@@ -2648,6 +2710,12 @@ async editProp (type, path, prop, dv) {
 
 async renderView (settings, props, pages, dv) {
 
+  let sortProp = dv.current().sort
+  let sortDir = dv.current().sort_direction
+  if (!sortDir) sortDir = "asc"
+
+  pages = this.sortByProp(pages, sortProp, sortDir)
+
   let view = dv.current().view
   let cardsPosition = settings["cards image position"]
   let paginationNum = settings["entries on page"]
@@ -2688,6 +2756,9 @@ async renderView (settings, props, pages, dv) {
         await this.searchInput()
     }
 
+
+    
+
     
 
   if (!view || view == "table") {
@@ -2706,6 +2777,8 @@ async renderView (settings, props, pages, dv) {
   if(search) {
     search.focus()
   }
+
+
   
 }
 
