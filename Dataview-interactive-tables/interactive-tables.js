@@ -479,8 +479,8 @@ getPropType(prop) {
 
 
 
-    async changeViewButton(dv) {
-        let currentView = dv.current().view
+    async changeViewButton(dv, container, id) {
+        let currentView = dv.current()["view_" + id]
 
         if (!currentView) {
             currentView = "table"
@@ -507,23 +507,23 @@ getPropType(prop) {
     
         button.className = "dvit-button change-view-button"
         button.onclick = async () => {
-            await this.changeView(dv)    
+            await this.changeView(dv, id)    
         }
-        dv.container.append(button)
+        container.append(button)
 	}
 
 
-    async changeView(dv) {
+    async changeView(dv, id) {
     
         let currentFile = await app.vault.getAbstractFileByPath(dv.current().file.path)
 
-        let currentView = dv.current().view
+        let currentView = dv.current()["view_" + id]
         let views = ["table", "cards", "list"]
         let view = await this.suggester(views)
         
         if (view && view != currentView) {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
-                frontmatter.view = view
+                frontmatter["view_" + id] = view
             })
         }
 
@@ -567,17 +567,17 @@ sortByProp(pages, prop, dir) {
 // Filter
 
 
-async filterProps(props, current, pages) {
+async filterProps(props, current, pages, id) {
 
     
 
     props = props.filter(prop => prop.type != "no prop")
 
 	for (let p of props) {
-        pages = await this.filter(p, current, pages)
+        pages = await this.filter(p, current, pages, id)
 	}
 
-    let search = current.search
+    let search = current["search_" + id]
 
     if (search && search.length > 0) {
         let keyWords = search.split(" ")
@@ -598,7 +598,7 @@ async filterProps(props, current, pages) {
 
 
 
-async filter(p, current, filteredPages) {
+async filter(p, current, filteredPages, id) {
     
     const dv = this.dv
     const getVal = this.getVal
@@ -609,7 +609,7 @@ async filter(p, current, filteredPages) {
     let propType = getPropType(prop)
 
 
-	let propName = "filter_" + prop
+	let propName = "filter_" + id + "_" + prop
 	let filter = current[propName]
 	
 	
@@ -638,9 +638,9 @@ async filter(p, current, filteredPages) {
 
         if (multiSelect) {
 
-            let includePropName = "filter_include_" + prop
-            let excludePropName = "filter_exclude_" + prop
-            let allValuesPropName = "filter_all_values_" + prop
+            let includePropName = "filter_include_" + id + "_" + prop
+            let excludePropName = "filter_exclude_" + id + "_" + prop
+            let allValuesPropName = "filter_all_values_" + id + "_" + prop
 
             let includeFilter = current[includePropName]
             let excludeFilter = current[excludePropName]
@@ -875,10 +875,14 @@ listContainsPath(prop, text) {
 // Create buttons to change filters
 
 
-async filterButtonProps(props, pages) {
+async filterButtonProps(props, pages, container, id) {
+
+
+    
+
     props = props.filter(p => p.filter)
 	for (let p of props) {
-		await this.filterButton(p, pages)
+		await this.filterButton(p, pages, container, id)
 	}
 }
 
@@ -888,7 +892,12 @@ async filterButtonProps(props, pages) {
 
 
 
-async filterButton(p, pages, className) {
+async filterButton(p, pages, container, id, className) {
+
+    console.log(id)
+
+    
+
 	const {dv} = this
 	let {prop, multiSelect, name, buttonName} = p
 	
@@ -903,7 +912,7 @@ async filterButton(p, pages, className) {
 
 	
 	let current = dv.current()
-    let propName = "filter_" + prop
+    let propName = "filter_" + id + "_" + prop
     let buttonClass = "dvit-button"
 
     if (!className) {
@@ -911,7 +920,7 @@ async filterButton(p, pages, className) {
             buttonClass = "dvit-button button-selected"
         }
         
-        if (propName == "filter_file.tasks" && current[propName]) {
+        if (propName == "filter_" + id +"_file.tasks" && current[propName]) {
             buttonClass = "dvit-button button-selected"
         }
     } else {
@@ -920,8 +929,8 @@ async filterButton(p, pages, className) {
 	 
 
     if (multiSelect) {
-        let propNameInclude = "filter_include_" + prop
-        let propNameExclude = "filter_exclude_" + prop
+        let propNameInclude = "filter_include_" + id + "_" + prop
+        let propNameExclude = "filter_exclude_" + id + "_" + prop
         if ((current[propNameInclude] && current[propNameInclude].length != 0) || 
         (current[propNameExclude] && current[propNameExclude].length != 0)) {
 		    buttonClass = "dvit-button button-selected"
@@ -945,7 +954,7 @@ async filterButton(p, pages, className) {
     button.append(buttonName)
     button.className = buttonClass
     button.onclick = async () => {
-        await this.changeProp(p, pages)    
+        await this.changeProp(p, pages, id)    
     }
 
 
@@ -953,7 +962,7 @@ async filterButton(p, pages, className) {
 
 
 
-    dv.container.append(button)
+    container.append(button)
 }
 
 
@@ -1008,7 +1017,9 @@ getValueNames(values, propType, filter) {
 
 
 
-async changeProp(p, pages) {
+async changeProp(p, pages, id) {
+
+    let paginationProp = "pagination_" + id
     const {dv} = this
     const getVal = this.getVal
     
@@ -1031,7 +1042,7 @@ async changeProp(p, pages) {
     if (propType == "text") {
 
         let currentFile = await app.vault.getAbstractFileByPath(current.file.path)
-        let propName = "filter_" + prop
+        let propName = "filter_" + id + "_" + prop
         let filter = current[propName]
 
 
@@ -1076,13 +1087,13 @@ async changeProp(p, pages) {
         if (val == "all") {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 delete frontmatter[propName]
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
             })
             
         } else {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 frontmatter[propName] = val
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
 
             })
         }
@@ -1091,7 +1102,7 @@ async changeProp(p, pages) {
 
     if (propType == "number") {
         let currentFile = await app.vault.getAbstractFileByPath(current.file.path)
-        let propName = "filter_" + prop
+        let propName = "filter_" + id + "_" + prop
         let values = pages.map(p => getVal(p, prop))
         
         values = [...new Set(values)]
@@ -1107,13 +1118,13 @@ async changeProp(p, pages) {
         if (val == "all") {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 delete frontmatter[propName]
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
             })
             
         } else {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 frontmatter[propName] = val
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
 
             })
         }
@@ -1123,7 +1134,7 @@ async changeProp(p, pages) {
     if (propType == "date" || propType == "datetime") {
 
         let currentFile = await app.vault.getAbstractFileByPath(current.file.path)
-        let propName = "filter_" + prop
+        let propName = "filter_" + id + "_" + prop
         let values = pages.map(p => {
           let val = getVal(p, prop)
           if (val && propType == "date") {
@@ -1165,13 +1176,13 @@ async changeProp(p, pages) {
         if (val == "all") {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 delete frontmatter[propName]
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
             })
             
         } else {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 frontmatter[propName] = val
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
 
             })
         }
@@ -1180,7 +1191,7 @@ async changeProp(p, pages) {
     if (propType == "multitext" && !multiSelect) {
 
 		let currentFile = app.vault.getAbstractFileByPath(current.file.path)
-		let propName = "filter_" + prop
+		let propName = "filter_" + id + "_" + prop
         let filter = current[propName]
 
 		let values = pages.map(p => {
@@ -1237,13 +1248,13 @@ async changeProp(p, pages) {
         if (val == "all") {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 delete frontmatter[propName]
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
             })
             
         } else {
             await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
                 frontmatter[propName] = val
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
 
             })
         }
@@ -1254,9 +1265,9 @@ async changeProp(p, pages) {
     if (propType == "multitext" && multiSelect) {
 
 		let currentFile = app.vault.getAbstractFileByPath(current.file.path)
-		let includePropName = "filter_include_" + prop
-		let excludePropName = "filter_exclude_" + prop
-        let allValuesPropName = "filter_all_values_" + prop
+		let includePropName = "filter_include_" + id + "_" + prop
+		let excludePropName = "filter_exclude_" + id + "_" + prop
+        let allValuesPropName = "filter_all_values_" + id + "_" + prop
     	let includeFilter = current[includePropName]
 		let excludeFilter = current[excludePropName]
         let allValues = current[allValuesPropName]
@@ -1338,7 +1349,7 @@ async changeProp(p, pages) {
                 delete frontmatter[includePropName]
                 delete frontmatter[excludePropName]
                 delete frontmatter[allValuesPropName]
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
             })
             
         } else {
@@ -1346,7 +1357,7 @@ async changeProp(p, pages) {
                 frontmatter[includePropName] = newFilter.include
                 frontmatter[excludePropName] = newFilter.exclude
                 frontmatter[allValuesPropName] = newFilter.allValues
-                frontmatter.pagination = 0
+                frontmatter[paginationProp] = 0
 
             })
         }
@@ -1364,7 +1375,7 @@ async changeProp(p, pages) {
 
 	if (propType == "checkbox") {
 		let currentFile = app.vault.getAbstractFileByPath(current.file.path)
-		let propName = "filter_" + prop
+		let propName = "filter_" + id + "_" + prop
 
         let values = ["all", "-", "false", "true"]
 		let val = await suggester(values)
@@ -1373,14 +1384,14 @@ async changeProp(p, pages) {
 
 		app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
 		    frontmatter[propName] = val
-			frontmatter.pagination = 0
+			frontmatter[paginationProp] = 0
 		})
 
 	}
 
 
     if (p.prop == "file.tasks") {
-        let propName = "filter_file.tasks"
+        let propName = "filter_" + id +"_file.tasks"
         let filter = current[propName]
         let currentFile = await app.vault.getAbstractFileByPath(current.file.path)
         let values = ["all", "completed", "not completed"]
@@ -1434,7 +1445,7 @@ async changeProp(p, pages) {
 
 // Button to create new notes
 
-async newEntryButton(dv, args) {
+async newEntryButton(dv, args, container) {
 
     const { noteName, noteTemplate, noteFolder } = args
 
@@ -1471,7 +1482,7 @@ async newEntryButton(dv, args) {
     button.onclick = async () => {
         await createNote()    
     }
-    dv.container.append(button)
+    container.append(button)
 
 
 }
@@ -1492,7 +1503,7 @@ async newEntryButton(dv, args) {
 // Refresh button
 
 
-async refreshButton() {
+async refreshButton(container) {
   const {dv} = this
     let button = document.createElement("button")
     
@@ -1502,12 +1513,12 @@ async refreshButton() {
     button.onclick = async () => {
         await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
     }
-    dv.container.append(button)
+    container.append(button)
 }
 
 
 
-async searchButton() {
+async searchButton(container, id) {
   const {dv} = this
   let current = dv.current()
   let file = app.vault.getAbstractFileByPath(current.file.path)
@@ -1522,32 +1533,32 @@ async searchButton() {
     button.className = "dvit-button dvit-search-button"
 
 
-    if (current.show_search) {
+    if (current["show_search_" + id]) {
         button.classList.add("button-selected")
     }
     button.onclick = async () => {
         await app.fileManager.processFrontMatter(file, fm => {
-            if (current.show_search) {
-                delete fm.search
+            if (current["show_search_" + id]) {
+                delete fm["search_" + id]
             }
-            fm.show_search = !fm.show_search
+            fm["show_search_" + id] = !fm["show_search_" + id]
         })
         setTimeout(async() => {
             await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
         }, 250)
     }
-    dv.container.append(button)
+    container.append(button)
 }
 
 
-async searchInput() {
+async searchInput(container, id) {
   const {dv} = this
   let current = dv.current()
   let file = app.vault.getAbstractFileByPath(current.file.path)
     let search = document.createElement("input")
     search.classList.add("dvit-search-input")
-    search.value = current.search
-    if (!current.search) search.value = ""
+    search.value = current["search_" + id]
+    if (!current["search_" + id]) search.value = ""
 
 
     search.addEventListener("keydown", (e) => {
@@ -1562,10 +1573,10 @@ async searchInput() {
     search.oninput = async (e) => {
         
         await app.fileManager.processFrontMatter(file, fm => {
-            fm.search = search.value
+            fm["search_" + id] = search.value
         })
     }
-    dv.container.append(search)
+    container.append(search)
 }
 	
 	
@@ -1578,10 +1589,10 @@ async searchInput() {
 
 // Pagination
 
-async increasePagination(increase, current) {
+async increasePagination(increase, current, paginationProp) {
 	
 	let currentFile = app.vault.getAbstractFileByPath(current.file.path)
-	let pagination = current.pagination
+	let pagination = current[paginationProp]
 
 	if (!pagination) pagination = 0
     
@@ -1591,7 +1602,7 @@ async increasePagination(increase, current) {
         
 
 		await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
-			frontmatter.pagination = Number(pagination)
+			frontmatter[paginationProp] = Number(pagination)
 		})
         setTimeout(async() => {
 	        await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
@@ -1601,15 +1612,15 @@ async increasePagination(increase, current) {
 
 
 
-async decreasePagination(current) {
+async decreasePagination(current, paginationProp) {
 
 	let currentFile = app.vault.getAbstractFileByPath(current.file.path)
-	let pagination = current.pagination
+	let pagination = current[paginationProp]
 	if (!pagination) pagination = 0
 	if (pagination > 0) {
 		pagination--
 		await app.fileManager.processFrontMatter(currentFile, (frontmatter) => { 
-			frontmatter.pagination = pagination
+			frontmatter[paginationProp] = Number(pagination)
 		})
         setTimeout(async() => {
 	        await app.commands.executeCommandById("dataview:dataview-force-refresh-views")
@@ -1619,10 +1630,10 @@ async decreasePagination(current) {
 
 
 
-async nextPageButton(pagesCount) {
+async nextPageButton(pagesCount, paginationProp) {
 	const {dv} = this
 	let current = dv.current()
-	let pagination = current.pagination
+	let pagination = current[paginationProp]
 	if (!pagination) pagination = 0
 	  
 	let buttonClass = "dvit-button"
@@ -1638,7 +1649,7 @@ async nextPageButton(pagesCount) {
     button.className = buttonClass
     button.onclick = async () => {
         
-        await this.increasePagination(increase, current)    
+        await this.increasePagination(increase, current, paginationProp)    
     }
     //dv.container.append(button)
     return button
@@ -1646,11 +1657,14 @@ async nextPageButton(pagesCount) {
 
 	
 	
-async prevPageButton() {
+async prevPageButton(paginationProp) {
+
+    
+
   const {dv} = this
 	let current = dv.current()
 	let buttonClass = "dvit-button"
-	let pagination = current.pagination
+	let pagination = current[paginationProp]
 	if (!pagination) pagination = 0
 	
 	if (pagination <= 0) {
@@ -1661,7 +1675,7 @@ async prevPageButton() {
     button.append("<<")
     button.className = buttonClass
     button.onclick = async () => {
-        await this.decreasePagination(current)    
+        await this.decreasePagination(current, paginationProp)    
     }
     //dv.container.append(button)
     return button
@@ -1669,42 +1683,48 @@ async prevPageButton() {
 
 
 
-currentPagination() {
+currentPagination(paginationProp) {
   const {dv} = this
-    let pagination = dv.current().pagination
+    let pagination = dv.current()[paginationProp]
     if (!pagination) pagination = 0
     return +pagination + 1
 }
 	
 
 
-async paginationBlock(filteredPages, paginationNum) {
+async paginationBlock(filteredPages, paginationNum, container, id) {
+
+    let paginationProp = "pagination_" + id
     
     const {dv} = this
     let pagesLength = filteredPages.length
     let remainder = pagesLength % paginationNum
     let pagesCount = (pagesLength - remainder) / paginationNum
     if (remainder != 0) pagesCount++
-    let prev = await this.prevPageButton()
-    let next = await this.nextPageButton(pagesCount)
+
+    let prev = await this.prevPageButton(paginationProp)
+    let next = await this.nextPageButton(pagesCount, paginationProp)
+
     let block = document.createElement("span")
     block.append(prev)
-    block.append(this.currentPagination())
+    block.append(this.currentPagination(paginationProp))
     block.append(next)
     block.append(pagesCount)
     block.style = "white-space:nowrap"
-    dv.container.append(block)
+    container.append(block)
    
    
 }
 
 
 
-paginate(rows, num, current) {
-    let pagination = current.pagination
+paginate(rows, num, current, id) {
+    let paginationProp = "pagination_" + id
+    let pagination = current[paginationProp]
     if (!pagination) pagination = 0
     return rows.slice(num * pagination, num * (+pagination + 1))
 }
+
 
 
 
@@ -1830,13 +1850,13 @@ getDisplay(link) {
 
 
 
-async createList(props, pages, filteredPages, paginationNum) {
+async createList(props, pages, filteredPages, paginationNum, id) {
    const {dv} = this
     let current = dv.current()
-    filteredPages = await this.filterProps(props, current, filteredPages)
+    filteredPages = await this.filterProps(props, current, filteredPages, id)
 
     if (paginationNum) {
-        filteredPages = await this.paginate(filteredPages, paginationNum, current)
+        filteredPages = await this.paginate(filteredPages, paginationNum, current, id)
     }
      
     for (let page of filteredPages) {
@@ -1904,7 +1924,7 @@ async createList(props, pages, filteredPages, paginationNum) {
 
 
 
-async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsView) {
+async createTable(props, pages, filteredPages, paginationNum, container, id, fullWidth, cardsView) {
     const {dv} = this
 
         
@@ -1912,10 +1932,10 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
     this.props = props
     let current = dv.current()
 
-    filteredPages = await this.filterProps(props, current, filteredPages)
+    filteredPages = await this.filterProps(props, current, filteredPages, id)
 
     if (paginationNum) {
-        filteredPages = await this.paginate(filteredPages, paginationNum, current)
+        filteredPages = await this.paginate(filteredPages, paginationNum, current, id)
     }
     
 
@@ -1946,6 +1966,7 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
       let headerButton = document.createElement("div")
       headerButton.classList.add("header-sorting-button")
       headerButton.setAttribute("data-prop", prop)
+      headerButton.setAttribute("data-view-id", id)
 
       if (propItem.name) {
         headerButton.innerHTML = icon + propItem.name
@@ -2278,7 +2299,7 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
                     if (p.file && p.file.tasks) {
                         let tasks = p.file.tasks
 
-                        let filterStatus = dv.current()["filter_file.tasks"]
+                        let filterStatus = dv.current()["filter_" + id +"_file.tasks"]
 
                         if (filterStatus == "completed") {
                             tasks = tasks.filter(t => t.status == "x")
@@ -2331,6 +2352,15 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
     markdownTable = markdownTable.replaceAll("&amp;", "&")
 
     let tableWrapper = dv.paragraph(markdownTable)
+/*
+    let tableWrapper = document.createElement("p")
+    tableWrapper.innerHTML = markdownTable
+    dv.container.append(markdownTable)
+*/
+
+container.append(tableWrapper)
+
+
 
 
     tableWrapper.classList.add("dv-table-wrapper")
@@ -2458,20 +2488,24 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
     for (let button of headerButtons) {
 
         let prop = button.getAttribute("data-prop")
+        let id = button.getAttribute("data-view-id")
+        let sortProp = "sort_" + id
+        let sortDirProp = "sort_direction_" + id
+
         let file = app.vault.getAbstractFileByPath(dv.current().file.path)
 
         button.onclick = async () => {
             await app.fileManager.processFrontMatter(file, fm => {
-                if (fm.sort == prop) {
-                    if (!fm.sort_direction || fm.sort_direction == "desc") {
-                        fm.sort_direction = "asc"
+                if (fm[sortProp] == prop) {
+                    if (!fm[sortDirProp] || fm[sortDirProp] == "desc") {
+                        fm[sortDirProp] = "asc"
                     } else {
-                        fm.sort_direction = "desc"
+                        fm[sortDirProp] = "desc"
                     }
                     
                 } else {
-                    fm.sort = prop
-                    fm.sort_direction = "asc"
+                    fm[sortProp] = prop
+                    fm[sortDirProp] = "asc"
                 }
             })
 
@@ -2484,8 +2518,8 @@ async createTable(props, pages, filteredPages, paginationNum, fullWidth, cardsVi
         button.onmousedown = async (e) => {
             if (e.button == 2) {
                 await app.fileManager.processFrontMatter(file, fm => {
-                    delete fm.sort
-                    delete fm.sort_direction
+                    delete fm[sortProp]
+                    delete fm[sortDirProp]
                 })
 
                 setTimeout(async() => {
@@ -2732,13 +2766,23 @@ async editProp (type, path, prop, dv) {
 
 async renderView (settings, props, pages, dv) {
 
-  let sortProp = dv.current().sort
-  let sortDir = dv.current().sort_direction
+    let id = settings["id"]
+    if (!id) id = "no-id"
+
+    let viewContainer = document.createElement("div")
+    viewContainer.classList.add("dvit-view-id-" + id)
+
+    dv.container.append(viewContainer)
+
+
+
+  let sortProp = dv.current()["sort_" + id]
+  let sortDir = dv.current()["sort_direction_" + id]
   if (!sortDir) sortDir = "asc"
 
   pages = this.sortByProp(pages, sortProp, sortDir)
 
-  let view = dv.current().view
+  let view = dv.current()["view_" + id]
   let cardsPosition = settings["cards image position"]
   let paginationNum = settings["entries on page"]
   let addNewButton = settings["add new note button"]
@@ -2757,25 +2801,29 @@ async renderView (settings, props, pages, dv) {
         noteFolder
     }
 
-    await this.newEntryButton(dv, args)
+    await this.newEntryButton(dv, args, viewContainer)
   }
 
     let filteredPages = [...pages]
-    filteredPages = await this.filterProps(props, dv.current(), filteredPages)
+    filteredPages = await this.filterProps(props, dv.current(), filteredPages, id)
 
-    await this.filterButtonProps(props, pages)
-    await this.changeViewButton(dv)
-    await this.refreshButton()
+
+
+    await this.filterButtonProps(props, pages, viewContainer, id)
+    await this.changeViewButton(dv, viewContainer, id)
+    await this.refreshButton(viewContainer)
     
+
+
     if (paginationNum) {
-	await this.paginationBlock(filteredPages, paginationNum)
+	await this.paginationBlock(filteredPages, paginationNum, viewContainer, id)
     }
     
-    await this.searchButton()
+    await this.searchButton(viewContainer, id)
 
 
-    if (dv.current().show_search) {
-        await this.searchInput()
+    if (dv.current()["show_search_" + id]) {
+        await this.searchInput(viewContainer, id)
     }
 
 
@@ -2784,13 +2832,13 @@ async renderView (settings, props, pages, dv) {
     
 
   if (!view || view == "table") {
-    await this.createTable(props, pages, filteredPages, paginationNum, fullWidth)
+    await this.createTable(props, pages, filteredPages, paginationNum, viewContainer, id, fullWidth)
 
   } else if (view == "cards") {
-    await this.createTable(props, pages, filteredPages, paginationNum, fullWidth, {cards: true, position: cardsPosition})
+    await this.createTable(props, pages, filteredPages, paginationNum, viewContainer, id, fullWidth, {cards: true, position: cardsPosition})
 
   } else if (view == "list") {
-    await this.createList(props, pages, filteredPages, paginationNum)
+    await this.createList(props, pages, filteredPages, paginationNum, id)
   }
 
 
