@@ -894,7 +894,7 @@ async filterButtonProps(props, pages, container, id) {
 
 async filterButton(p, pages, container, id, className) {
 
-    console.log(id)
+
 
     
 
@@ -1019,11 +1019,13 @@ getValueNames(values, propType, filter) {
 
 async changeProp(p, pages, id) {
 
+    
+
     let paginationProp = "pagination_" + id
     const {dv} = this
     const getVal = this.getVal
     
-    let { prop, multiSelect, fuzzySearch } = p
+    let { prop, multiSelect, fuzzySearch, valueOptions } = p
     let current = dv.current()
 
 
@@ -1061,8 +1063,17 @@ async changeProp(p, pages, id) {
         values = [...new Set(values)]
         values = values.filter(v => v)
         values.sort()
+        
+        if (valueOptions) {
+            values = valueOptions.filter(v => v)
+        }
+
         values.unshift("-")
         values.unshift("all")
+
+
+
+        
 
 
         let valueNames = values.map((v) => {
@@ -1108,6 +1119,13 @@ async changeProp(p, pages, id) {
         values = [...new Set(values)]
         values = values.filter(v => v).map(v => v + "")
         values.sort()
+
+
+        if (valueOptions) {
+            values = valueOptions.filter(v => v).map(v => v + "")
+        }
+
+
         values.unshift("-")
         values.unshift("all")
         
@@ -1228,6 +1246,14 @@ async changeProp(p, pages, id) {
 		multiValues = [...new Set(multiValues)]
 		multiValues = multiValues.filter(v => v)
 		multiValues.sort()
+
+
+        if (valueOptions) {
+            multiValues = valueOptions.filter(v => v).map(v => v + "")
+        }  
+
+
+
 		multiValues.unshift("-")
         multiValues.unshift("all")
 
@@ -2643,6 +2669,14 @@ async editProp (type, path, prop, dv) {
 
         let values = this.getValues(prop)
         if (!values) values = []
+
+        let propItem = this.props.find(p => p.prop == prop)
+        let options = propItem.valueOptions
+        if (options) {
+            values = [...options]
+        }
+
+
         if (!prevVal) prevVal = []
         if (typeof prevVal == "string") prevVal = [prevVal]
 
@@ -2690,7 +2724,7 @@ async editProp (type, path, prop, dv) {
         let values = this.getValues(prop)
  
         let propItem = this.props.find(p => p.prop == prop)
-        let options = propItem.selectOptions
+        let options = propItem.valueOptions
         if (options) {
             values = [...options]
         }
