@@ -1297,6 +1297,9 @@ async changeProp(p, pages, id) {
     	let includeFilter = current[includePropName]
 		let excludeFilter = current[excludePropName]
         let allValues = current[allValuesPropName]
+
+
+        
         
 
         if (!allValues && allValues !== false) {
@@ -1356,6 +1359,14 @@ async changeProp(p, pages, id) {
 		multiValues = multiValues.filter(v => v)
 	
 		multiValues.sort()
+
+
+
+        if (valueOptions) {
+            multiValues = valueOptions.filter(v => v)
+        }
+
+
 		multiValues.unshift("-")
 
 		let valueNames = multiValues.map((v) => {
