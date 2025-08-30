@@ -9,6 +9,7 @@ async suggester(values, names) {
 
             getSuggestions(query) {
                 return values.filter((val) => {
+					val = String(val);
                     if (val.startsWith("[[")) {
                         val = val.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5").replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
                     }
@@ -20,7 +21,7 @@ async suggester(values, names) {
                 if (names) {
                     text = names[values.indexOf(val)]
                 } 
-                if (text.startsWith("[[")) {
+                if (typeof text === "string" && text.startsWith("[[")) {
                     text = text.replace(/(.*)(\/)([^\/]+)(\]\])(.*)/, "$3$5")
                         .replace(/(\[\[)(.*)(\]\])(.*)/, "$2$4")
                         .replace(/(.*\|)(.*)/, "$2")
